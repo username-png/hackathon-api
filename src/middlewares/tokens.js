@@ -17,30 +17,30 @@ const setTokens = newTokens => {
 }
 
 const validateToken = (req, res, next) => {
-  if (req.session.user) {
-    if (!tokens.access_token || new Date() >= tokens.expires) {
-      const redirectUri = REDIRECT_URI + req.baseUrl + req.path
-      const { code } = req.query
-      const meliObject = new meli.Meli(CLIENT_ID, CLIENT_SECRET)
-      if (code) {
-        meliObject.authorize(code, redirectUri, (error, response) => {
-          if (error) {
-            throw error
-          }
-          setTokens(response)
-          res.locals.access_token = tokens.access_token
-          res.redirect(redirectUri)
-        })
-      } else {
-        res.redirect(meliObject.getAuthURL(redirectUri))
-      }
+  // if (req.session.user) {
+  if (!tokens.access_token || new Date() >= tokens.expires) {
+    const redirectUri = REDIRECT_URI + req.baseUrl + req.path
+    const { code } = req.query
+    const meliObject = new meli.Meli(CLIENT_ID, CLIENT_SECRET)
+    if (code) {
+      meliObject.authorize(code, redirectUri, (error, response) => {
+        if (error) {
+          throw error
+        }
+        setTokens(response)
+        res.locals.access_token = tokens.access_token
+        res.redirect(redirectUri)
+      })
     } else {
-      res.locals.access_token = tokens.access_token
-      next()
+      res.redirect(meliObject.getAuthURL(redirectUri))
     }
   } else {
-    res.redirect('/')
+    res.locals.access_token = tokens.access_token
+    next()
   }
+  // } else {
+  //   res.redirect('/')
+  // }
 }
 
 module.exports = validateToken

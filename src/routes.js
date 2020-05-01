@@ -7,10 +7,6 @@ const { PASSWORD } = process.env
 
 const routes = express.Router()
 
-routes.get('/', (req, res) => {
-  res.redirect('/views/home.html')
-})
-
 routes.post('/login', (req, res) => {
   if (req.body.password === PASSWORD) {
     req.session.user = true
