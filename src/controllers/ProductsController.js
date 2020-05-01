@@ -1,4 +1,4 @@
-const uuid = require('uuid/v4')
+const uuid = require('uuid')
 const connection = require('../database/connection')
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
   async create(request, response) {
     const { name, quantity, size, color, price, weight, image } = request.body
 
-    const id = uuid()
+    const id = uuid.v4()
 
     await connection('products').insert({
       id,

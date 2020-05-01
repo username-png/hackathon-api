@@ -4,7 +4,7 @@ exports.up = async function(knex) {
     table.uuid('id').primary()
     table.string('name').notNullable()
     table.integer('quantity').notNullable()
-    table.jsonb('size').notNullable()
+    table.json('size')
     table.string('color')
     table.float('price').notNullable()
     table.float('weight').notNullable()
