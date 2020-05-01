@@ -9,19 +9,23 @@ module.exports = {
   },
 
   async create(request, response) {
-    const { name, quantity, size, color, price, weight, image } = request.body
+    const { name, quantity, size, color, price, weight, description } = request.body
 
     const id = uuid.v4()
+
+    const {width, height, lenght} = size
 
     await connection('products').insert({
       id,
       name,
       quantity,
-      size,
+      width,
+      height,
+      lenght,
       color,
       price,
       weight,
-      image,
+      description,
     })
 
     return response.json({ id, name })

@@ -4,11 +4,11 @@ exports.up = async function(knex) {
     table.uuid('id').primary()
     table.string('name').notNullable()
     table.integer('quantity').notNullable()
+    table.float('price').notNullable()
     table.json('size')
     table.string('color')
-    table.float('price').notNullable()
-    table.float('weight').notNullable()
-    table.string('image').notNullable()
+    table.float('weight')
+    table.string('image')
   })
 };
 
