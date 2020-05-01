@@ -1,0 +1,28 @@
+{"intents": [
+        {"tag": "valor",
+         "patterns": ["Quanto fica?", "Qual valor?", "Quanto custa?", "QUal preço?", "Fica caro?", "Fica caro?"],
+         "responses": ["valor"],
+         "context_set": ""
+        },
+        {"tag": "tamanho",
+         "patterns": ["Qual tamanho?", "Quantos metros?", "QUal dimensão", "É muito grande?", "É muito pequeno?", "Quanto mede?"],
+         "responses": ["tamanho"]
+        },
+        {"tag": "peso",
+         "patterns": ["Pesa muito?", "Tem quantos quilos?", "Muitos kilos?", "É muito leve?", "É muito pesado?"],
+         "responses": ["peso"]
+        },
+        {"tag": "cor",
+         "patterns": ["Tem que cores?", "Tem vermelho?", "Tem azul?", "Tem rosa?", "Tem cinza?", "Tem amarelo?", "Tem verde?", "cores" ],
+         "responses": ["cor"]
+        },
+        {"tag": "pagamento",
+         "patterns": ["Pode ser no cartão?", "Tem boleto?", "Da para pagar pelo picpay?", "COmo posso pagar?", "Da pra parcelar?" ],
+         "responses": ["pagamento"]
+        },
+        {"tag": "quantidde",
+         "patterns": ["Quantos tem?", "Tem muitos ainda?", "Têm mais no estoque?", "Vão ter mais a venda?", "Consigo encomendar mais?", "vai faltar?", "quero comprar 2", "quero comprar"],
+         "responses": ["quantidade"]
+        }
+   ]
+}
