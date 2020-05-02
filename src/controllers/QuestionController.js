@@ -4,7 +4,7 @@ const uuid = require('uuid')
 module.exports = {
   async index(request, response) {
     try {
-      const product_id = request.headers.product_id
+      const product_id = request.query.product_id
 
       const questions = await connection('questions')
         .where('product_id', product_id)
@@ -18,7 +18,7 @@ module.exports = {
 
   async create(request, response) {
     try {
-      const product_id = request.headers.product_id
+      const product_id = request.query.product_id
       const { user, question } = request.body
       const status = 'new'
       const id = uuid.v4()
@@ -38,8 +38,8 @@ module.exports = {
 
   async answer(request, response) {
     try {
-      const product_id = request.headers.product_id
-      const question_id = request.headers.question_id
+      const product_id = request.query.product_id
+      const question_id = request.query.question_id
 
       const { answer } = request.body
       const status = 'manual'
