@@ -13,7 +13,7 @@
          "responses": ["peso"]
         },
         {"tag": "cor",
-         "patterns": ["Tem que cores?", "Tem vermelho?", "Tem azul?", "Tem rosa?", "Tem cinza?", "Tem amarelo?", "Tem verde?", "cores" ],
+         "patterns": ["Tem que cores?", "Tem vermelho?", "Tem azul?", "Tem rosa?", "Tem cinza?", "Tem amarelo?", "Tem verde?", "cores", "Qual cor tem?" ],
          "responses": ["cor"]
         },
         {"tag": "pagamento",
@@ -23,6 +23,10 @@
         {"tag": "quantidde",
          "patterns": ["Quantos tem?", "Tem muitos ainda?", "Têm mais no estoque?", "Vão ter mais a venda?", "Consigo encomendar mais?", "vai faltar?", "quero comprar 2", "quero comprar"],
          "responses": ["quantidade"]
+        },
+        {"tag": "frete",
+         "patterns": ["tem frete?", "preço da entrega?", "Quanto custa o envio?"],
+         "responses": ["frete"]
         }
    ]
 }
