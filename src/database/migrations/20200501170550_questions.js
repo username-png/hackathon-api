@@ -1,5 +1,4 @@
-
-exports.up = async function(knex) {
+exports.up = async function (knex) {
   return await knex.schema.createTable('questions', table => {
     table.uuid('id').primary()
     table.string('user').notNullable()
@@ -11,10 +10,9 @@ exports.up = async function(knex) {
 
     table.uuid('answer_id')
     table.foreign('answer_id').references('id').inTable('answer')
-
   })
-};
+}
 
-exports.down = async function(knex) {
+exports.down = async function (knex) {
   return await knex.schema.dropTable('questions')
-};
+}

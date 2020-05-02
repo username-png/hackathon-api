@@ -1,5 +1,4 @@
-
-exports.up = async function(knex) {
+exports.up = async function (knex) {
   return await knex.schema.createTable('products', table => {
     table.uuid('id').primary()
     table.string('name').notNullable()
@@ -10,8 +9,8 @@ exports.up = async function(knex) {
     table.float('weight')
     table.string('image')
   })
-};
+}
 
-exports.down = async function(knex) {
+exports.down = async function (knex) {
   return await knex.schema.dropTable('products')
-};
+}
