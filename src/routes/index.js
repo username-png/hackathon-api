@@ -6,7 +6,7 @@ const answersRouter = require('./answers.routes')
 
 const routes = express.Router()
 
-// routes.use('/questions', questionRouter)
+routes.use('/questions', questionRouter)
 
 // routes.use('/answers', answersRouter)
 

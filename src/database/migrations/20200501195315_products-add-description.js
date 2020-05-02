@@ -1,5 +1,4 @@
-
-exports.up = async function(knex) {
+exports.up = async function (knex) {
   return await knex.schema.table('products', table => {
     table.dropColumn('size')
     table.float('width')
@@ -7,14 +6,14 @@ exports.up = async function(knex) {
     table.float('lenght')
     table.string('description')
   })
-};
+}
 
-exports.down = async function(knex) {
-  return await knex.schema.table('products',table=>{
+exports.down = async function (knex) {
+  return await knex.schema.table('products', table => {
     table.dropColumn('description')
     table.dropColumn('lenght')
     table.dropColumn('height')
     table.dropColumn('width')
     table.json('size')
   })
-};
+}
