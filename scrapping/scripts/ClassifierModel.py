@@ -10,6 +10,12 @@ from string import punctuation
 import warnings
 warnings.filterwarnings("ignore")
 
+'''
+To run this class do:
+pip install -r requirements.txt
+
+'''
+
 class ClassifierModel:
 
     def __init__(self):
@@ -19,19 +25,19 @@ class ClassifierModel:
 
     
 
-    def remove_punct(self,text):
+    def _remove_punct(self,text):
         text = str(text)
         text  = "".join([char for char in text if char not in string.punctuation])
         text = re.sub('[0-9]+', ' ', text)
         
         return text.lower()
 
-    def remove_stops(self,text):
+    def _remove_stops(self,text):
         clean = [word for word in text.split() if word.lower() not in stopwords.words('portuguese')]
         return ' '.join(clean)
 
     def get_predictions(self,product_id,text):
-        text_clean = self.remove_stops(self.remove_punct(text))
+        text_clean = self._remove_stops(self._remove_punct(text))
         text_list = [text_clean]
         
         dict_info = {
