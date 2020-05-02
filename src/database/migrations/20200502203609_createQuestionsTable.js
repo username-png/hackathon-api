@@ -4,12 +4,11 @@ exports.up = async function (knex) {
     table.string('user').notNullable()
     table.string('question').notNullable()
     table.string('status').notNullable()
+    table.string('answer')
+    table.boolean('is_good')
 
     table.uuid('product_id').notNullable()
     table.foreign('product_id').references('id').inTable('products')
-
-    table.uuid('answer_id')
-    table.foreign('answer_id').references('id').inTable('answer')
   })
 }
 

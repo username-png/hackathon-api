@@ -12,20 +12,22 @@ module.exports = {
     useNullAsDefault: true,
   },
 
-  staging: {
+  cloud: {
     client: 'postgresql',
     connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password',
+      host: `35.199.72.2`,
+      database: 'hackathon-db',
+      user: 'postgres',
+      password: 'jCK1az7lx4zy9Jn1',
     },
     pool: {
       min: 2,
       max: 10,
     },
     migrations: {
-      tableName: 'knex_migrations',
+      directory: './src/database/migrations',
     },
+    useNullAsDefault: true,
   },
 
   production: {
