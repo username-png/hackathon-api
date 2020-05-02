@@ -20,7 +20,7 @@ module.exports = {
     try {
       const product_id = request.headers.product_id
       const { user, question } = request.body
-      const status = 'waiting'
+      const status = 'new'
       const id = uuid.v4()
 
       await connection('questions').insert({
