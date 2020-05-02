@@ -114,6 +114,19 @@ def bag_of_words(s, words):
             
     return numpy.array(bag)
 
+#retorna a tag a ser pesquisada no banco
+def tag_of_search(inp):
+    results = model.predict([bag_of_words(inp, words)])
+    results_index = numpy.argmax(results)
+    tag = labels[results_index]
+
+    for tg in data["intents"]:
+        if tg['tag'] == tag:
+            responses = tg['responses']
+
+    return responses
+    
+
 #chat de teste com o bot
 def chat():
     print("Start talking with the bot (type quit to stop)!")
@@ -134,3 +147,4 @@ def chat():
         
 #Executa o chat de teste até usar 'quit' para parar
 chat()
+tag_of_search()
