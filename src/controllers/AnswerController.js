@@ -22,12 +22,16 @@ module.exports = {
     try {
       const product_id = request.headers.product_id
       const question_id = request.headers.question_id
+      let findAnswer = []
 
-      // const findAnswer = this.find(request, response)
+      findAnswer = await connection('answer')
+        .where('product_id', product_id)
+        .where('question_id', question_id)
+        .select('*')
 
-      // if (findAnswer) {
-      // throw new Error('Allready answer')
-      // }
+      if (findAnswer.length !== 0) {
+        throw new Error('Allready answered')
+      }
 
       const { answer, auto_answer, user } = request.body
 
@@ -44,8 +48,6 @@ module.exports = {
           product_id,
           question_id,
         })
-
-      console.log('criou ?!')
 
       return response.json({ id, answer })
     } catch (err) {
