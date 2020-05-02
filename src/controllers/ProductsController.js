@@ -57,29 +57,25 @@ module.exports = {
     }
   },
   async json_import(request, response) {
-    // try {
-    const tempDir = path.join(
-      __dirname,
-      '..',
-      '..',
-      'tmp',
-      request.file.filename,
-    )
+    try {
+      const tempDir = path.join(
+        __dirname,
+        '..',
+        '..',
+        'tmp',
+        request.file.filename,
+      )
 
-    stat(tempDir)
-      .then(status => {
-        const text = status.slice(/\n/)
-        const lines = text
-        const wrapped = '[' + lines.join(',') + ']'
-        return response.json(JSON.parse(wrapped))
-      })
-      .catch(err => {
-        console.log(err)
-        return response.send(err)
-      })
-
-    // } catch (err) {
-    // return response.status(400).json(err)
-    // }
+      stat(tempDir)
+        .then(status => {
+          return response.json(JSON.parse(status))
+        })
+        .catch(err => {
+          console.log(err)
+          return response.send(err)
+        })
+    } catch (err) {
+      return response.status(400).json(err)
+    }
   },
 }
