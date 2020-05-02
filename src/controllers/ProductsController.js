@@ -2,6 +2,8 @@ const uuid = require('uuid')
 const connection = require('../database/connection')
 const path = require('path')
 const fs = require('fs')
+const promisify = require('util').promisify
+const stat = promisify(fs.readFile)
 
 module.exports = {
   async index(request, response) {
@@ -56,18 +58,26 @@ module.exports = {
   },
   async json_import(request, response) {
     // try {
-    const tempDir = path.join('/../tmp', request.file.filename)
+    const tempDir = path.join(
+      __dirname,
+      '..',
+      '..',
+      'tmp',
+      request.file.filename,
+    )
 
-    console.log(tempDir) // home/nathan/src/tmp
+    stat(tempDir)
+      .then(status => {
+        const text = status.slice(/\n/)
+        const lines = text
+        const wrapped = '[' + lines.join(',') + ']'
+        return response.json(JSON.parse(wrapped))
+      })
+      .catch(err => {
+        console.log(err)
+        return response.send(err)
+      })
 
-    // const file = path.join(tempDir, request.file.filename)
-    const obj = fs.stat(tempDir, function (err, stats) {
-      if (err) throw Error
-      console.log(stats)
-    })
-    console.log(obj)
-
-    return response.json(obj)
     // } catch (err) {
     // return response.status(400).json(err)
     // }
