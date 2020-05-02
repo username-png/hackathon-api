@@ -43,7 +43,7 @@ module.exports = {
       const answer_id = request.headers.answer_id
 
       if (!answer_id) {
-        throw new Error('FALTOU O ID DA PERGUNTA')
+        throw new Error({ menssage: 'erro' })
       }
       const { status } = request.body
 
@@ -55,7 +55,7 @@ module.exports = {
 
       return response.json({ status, answer_id })
     } catch (err) {
-      return response.status(500).send(err)
+      return response.status(400).send(err.menssage)
     }
   },
 }

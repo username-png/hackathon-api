@@ -8,7 +8,7 @@ const routes = express.Router()
 
 routes.use('/questions', questionRouter)
 
-// routes.use('/answers', answersRouter)
+routes.use('/answers', answersRouter)
 
 routes.use('/products', productsRouter)
 
