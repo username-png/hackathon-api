@@ -13,7 +13,7 @@
          "responses": ["peso"]
         },
         {"tag": "cor",
-         "patterns": ["Tem que cores?", "Tem vermelho?", "Tem azul?", "Tem rosa?", "Tem cinza?", "Tem amarelo?", "Tem verde?", "cores", "Qual cor tem?" ],
+         "patterns": ["Tem que cores?", "Tem vermelho?", "Tem azul?", "Tem rosa?", "Tem cinza?", "Tem amarelo?", "Tem verde?", "cores", "Qual cor tem?", "Que cor é?", "Qual cor?" ],
          "responses": ["cor"]
         },
         {"tag": "pagamento",
