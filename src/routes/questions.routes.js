@@ -5,6 +5,6 @@ const productsRouter = express.Router()
 
 productsRouter.get('/', QuestionController.index)
 productsRouter.post('/', QuestionController.create)
-productsRouter.patch('/update', QuestionController.update)
+productsRouter.patch('/answer', QuestionController.answer)
 
 module.exports = productsRouter

@@ -36,26 +36,23 @@ module.exports = {
     }
   },
 
-  async update(request, response) {
+  async answer(request, response) {
     try {
       const product_id = request.headers.product_id
       const question_id = request.headers.question_id
-      const answer_id = request.headers.answer_id
 
-      if (!answer_id) {
-        throw new Error({ menssage: 'erro' })
-      }
-      const { status } = request.body
+      const { answer } = request.body
+      const status = 'manual'
 
       await connection('questions')
         .where('product_id', product_id)
         .where('id', question_id)
         .update('status', status)
-        .update('answer_id', answer_id)
+        .update('answer', answer)
 
-      return response.json({ status, answer_id })
+      return response.json({ status, answer })
     } catch (err) {
-      return response.status(400).send(err.menssage)
+      return response.status(400).send(err)
     }
   },
 }
