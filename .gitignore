@@ -2,3 +2,5 @@ node_modules
 /yarn.lock
 .env
 src/database/db.sqlite3
+
+/src/python/palavroes.csv
