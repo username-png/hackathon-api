@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import re
 import joblib as jb
 from scipy.sparse import hstack, csr_matrix
@@ -7,6 +6,23 @@ import json
 import string
 from nltk.corpus import stopwords
 from string import punctuation
+import warnings
+warnings.filterwarnings("ignore")
+#Parte de Neuro-linguistic programming
+import nltk
+#nltk.download('punkt') talvez precise dessa linha
+from nltk.stem.lancaster import LancasterStemmer
+stemmer = LancasterStemmer()
+
+#Parte do Tensorflow
+import numpy
+import tflearn
+import tensorflow
+import random
+
+#Parte dos intents do chat-bot 
+import json
+import pickle
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -23,7 +39,31 @@ class ClassifierModel:
         self.lgbm = jb.load('../models/lgbm_20200502.pkl.z')
         self.vectorizer = jb.load('../models/questions_vectorizer_20200502.pkl.z')
 
-    
+
+        with open("./intents.json") as file:
+            self.data = json.load(file)
+
+        try:
+            with open("data.pickle", "rb") as f:
+                print('Opening data file')
+                self.words, self.labels, self.training, self.output = pickle.load(f)
+        except:
+            print('Error loading data file')
+
+        net = tflearn.input_data(shape=[None, len(self.training[0])])
+        net = tflearn.fully_connected(net, 8)
+        net = tflearn.fully_connected(net, 8)
+        net = tflearn.fully_connected(net, len(self.output[0]), activation="softmax")
+        net = tflearn.regression(net)
+
+        self.model = tflearn.DNN(net)
+        
+        try:
+            self.model.load("model.tflearn")
+            print('Model loaded')
+        except:
+            print('Cant find model file')
+
 
     def _remove_punct(self,text):
         text = str(text)
@@ -36,15 +76,13 @@ class ClassifierModel:
         clean = [word for word in text.split() if word.lower() not in stopwords.words('portuguese')]
         return ' '.join(clean)
 
-    def get_predictions(self,product_id,text):
+    def _get_predictions(self,data):
+        text = data['question']
+
         text_clean = self._remove_stops(self._remove_punct(text))
         text_list = [text_clean]
         
-        dict_info = {
-            'product_id': [product_id],
-        }
-        numeric = pd.DataFrame(dict_info)
-
+        numeric = pd.DataFrame({'product_id': [data['product_id']]})
         
         text_vec = self.vectorizer.transform(text_list)
         stack = hstack([numeric,text_vec])
@@ -54,16 +92,70 @@ class ClassifierModel:
 
         return int(p)
     
+    def _bag_of_words(self,s, words):
+        bag = [0 for _ in range(len(words))]
 
-if __name__ == '__main__':
-    model = ClassifierModel()
-    pred = model.get_predictions(0,'Gostaria de saber se comprando 10 unidades tenho desconto?')
-    print('Previsao:', pred)
-    pred = model.get_predictions(0,'Qual a cor?')
-    print('Previsao:',pred)
+        s_words = nltk.word_tokenize(s)
+        s_words = [stemmer.stem(word.lower()) for word in s_words]
+
+        for se in s_words:
+            for i, w in enumerate(words):
+                if w == se:
+                    bag[i] = 1
+        return numpy.array(bag)
 
         
+    def _get_tag_context(self,data):
+        product_id = data['product_id']
+        question = data['question']
 
+        results = self.model.predict([self._bag_of_words(question, self.words)])
+        results_index = numpy.argmax(results)
+        tag = self.labels[results_index]
 
+        for tg in self.data["intents"]:
+            if tg['tag'] == tag:
+                responses = tg['responses']
 
+        return random.choice(responses)
 
+    
+
+    def run_models(self, data):
+        classification = self._get_predictions(data)
+
+        if classification==1:
+            question_return = {
+                "product_id": data['product_id'],
+                "question": data['question'],
+                "status": 'waiting', # new, manual, automatic, waiting, deleted
+                "answer": None, 
+                "is_good": 1, 
+                "tag": None
+            }
+        else:
+            tag = self._get_tag_context(data)
+            question_return = {
+                "product_id": data['product_id'],
+                "question": data['question'],
+                "status": "automatic",
+                "answer": None,
+                "is_good": 0,
+                "tag": tag
+            }
+            return question_return
+'''
+if __name__ == '__main__':
+    model = ClassifierModel()
+
+    x = input('Digite a pergunta a simular: ')
+
+    data = {
+        "product_id": 0,
+        "question": x
+    }
+
+    result = model.run_models(data)
+    
+    print(result)
+'''
