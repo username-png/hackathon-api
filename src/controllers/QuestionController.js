@@ -1,7 +1,6 @@
 const connection = require('../database/connection')
 const fs = require('fs')
 const path = require('path')
-const crypto = require('crypto')
 const { asyncForEach } = require('../utils/functions')
 
 module.exports = {
@@ -39,11 +38,8 @@ module.exports = {
       const status = request.body.status
       const errorMsg = request.body.err
 
-      const id = parseInt(crypto.randomBytes(3).toString('HEX'), 16)
-
-      await connection('questions').insert(
+      const id = await connection('questions').insert(
         {
-          id,
           user,
           question,
           status,

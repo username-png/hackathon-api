@@ -1,7 +1,6 @@
 const connection = require('../database/connection')
 const path = require('path')
 const fs = require('fs')
-const crypto = require('crypto')
 const promisify = require('util').promisify
 const stat = promisify(fs.readFile)
 
@@ -37,13 +36,8 @@ module.exports = {
         lenght = size.lenght
       }
 
-      const id = parseInt(crypto.randomBytes(3).toString('HEX'), 16)
-
-      console.log(id)
-
-      await connection('products').insert(
+      const [id] = await connection('products').insert(
         {
-          id,
           name,
           quantity,
           width,
