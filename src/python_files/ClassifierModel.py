@@ -33,7 +33,6 @@ pip install -r requirements.txt
 '''
 
 
-
 class ClassifierModel:
 
     def __init__(self):
@@ -133,9 +132,7 @@ class ClassifierModel:
         }
 
 
-
         classification = self._get_predictions(data_converted)
-        
 
         if classification==1:
             question_return = {
@@ -146,6 +143,7 @@ class ClassifierModel:
                 "is_good": 1, 
                 "tag": None
             }
+            return question_return
         else:
             tag = self._get_tag_context(data)
             question_return = {
