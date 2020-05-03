@@ -1,16 +1,17 @@
 const QuestionController = require('../controllers/QuestionController')
 const express = require('express')
 
-const productsRouter = express.Router()
+const questionsRouter = express.Router()
 
-productsRouter.get('/', QuestionController.index)
-productsRouter.get('/random', QuestionController.index_all)
-productsRouter.post(
+questionsRouter.get('/', QuestionController.index)
+questionsRouter.get('/random', QuestionController.index_all)
+questionsRouter.post(
   '/',
   QuestionController.checkIfSwearing,
   QuestionController.create,
 )
-productsRouter.patch('/answer', QuestionController.answer)
-productsRouter.get('/check-swearing', QuestionController.checkIfSwearing)
+questionsRouter.patch('/answer', QuestionController.answer)
+questionsRouter.get('/check-swearing', QuestionController.checkIfSwearing)
+questionsRouter.get('/awaiting/count', QuestionController.getAwaitingCount)
 
-module.exports = productsRouter
+module.exports = questionsRouter
