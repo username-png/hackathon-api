@@ -33,7 +33,8 @@ module.exports = {
     try {
       const product_id = request.query.product_id
       const { user, question } = request.body
-      const status = 'new'
+      const status = request.body.status
+      const errorMsg = request.body.err
       const id = uuid.v4()
 
       await connection('questions').insert({
@@ -43,7 +44,7 @@ module.exports = {
         status,
         product_id,
       })
-      return response.json({ id, status, question })
+      return response.json({ id, status, question, errorMsg })
     } catch (err) {
       return response.json(`ERRO: ${err}`)
     }
@@ -97,8 +98,12 @@ module.exports = {
     })
 
     if (swearing) {
-      return response.status(202).send({ error: errorMsg, swearing })
+      request.body.status = 'deleted'
+      request.body.err = errorMsg
+      return next()
     } else {
+      request.body.status = 'new'
+      request.body.err = ''
       return next()
     }
   },
