@@ -1,6 +1,6 @@
 // Update with your config settings.
 require('dotenv').config()
-const { CLOUD_SQL_CONNECTION_NAME, DATABASE, USER_DB, PASSWORD } = process.env
+const { HOST, DATABASE, USER_DB, PASSWORD } = process.env
 
 module.exports = {
   development: {
@@ -17,7 +17,7 @@ module.exports = {
   production: {
     client: 'postgresql',
     connection: {
-      host: `/cloudsql/${CLOUD_SQL_CONNECTION_NAME}`,
+      host: `${HOST}`,
       database: `${DATABASE}`,
       user: `${USER_DB}`,
       password: `${PASSWORD}`,
