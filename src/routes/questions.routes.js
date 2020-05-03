@@ -4,6 +4,7 @@ const express = require('express')
 const productsRouter = express.Router()
 
 productsRouter.get('/', QuestionController.index)
+productsRouter.get('/random', QuestionController.index)
 productsRouter.post(
   '/',
   QuestionController.checkIfSwearing,

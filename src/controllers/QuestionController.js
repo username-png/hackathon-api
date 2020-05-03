@@ -21,7 +21,8 @@ module.exports = {
 
   async index_all(request, response) {
     try {
-      const questions = await connection('questions').select('*')
+      const resPerPage = request.query.resPerPage;
+      const questions = await connection('questions').select('*').limit(resPerPage ? resPerPage : 10)
 
       return response.json(questions)
     } catch (err) {
