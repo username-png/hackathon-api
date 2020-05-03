@@ -2,5 +2,8 @@ node_modules
 .vscode
 yarn.lock
 .env
+src/database/db.sqlite3
+
+/src/python/palavroes.csv
 tmp/*
 app.yaml
