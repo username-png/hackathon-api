@@ -35,19 +35,22 @@ pip install -r requirements.txt
 
 class ClassifierModel:
 
-    def __init__(self):
-        self.random_forest = jb.load("./models/random_forest_20200502.pkl.z")
-        self.lgbm = jb.load('./models/lgbm_20200502.pkl.z')
-        self.vectorizer = jb.load('./models/questions_vectorizer_20200502.pkl.z')
+    def __init__(self, path):
+
+        self.path = path
+        self.random_forest = jb.load(path+"/models/random_forest_20200502.pkl.z")
+        self.lgbm = jb.load(path+'/models/lgbm_20200502.pkl.z')
+        self.vectorizer = jb.load(path+'/models/questions_vectorizer_20200502.pkl.z')
 
     
         print('Model loading')
 
-        with open("./intents.json") as file:
+        with open(self.path+"/intents.json") as file:
+            print('Loading intents')
             self.data = json.load(file)
 
         try:
-            with open("data.pickle", "rb") as f:
+            with open(self.path+"/data.pickle", "rb") as f:
                 print('Opening data file')
                 self.words, self.labels, self.training, self.output = pickle.load(f)
         except:
@@ -62,7 +65,7 @@ class ClassifierModel:
         self.model = tflearn.DNN(net)
         
         try:
-            self.model.load("model.tflearn")
+            self.model.load(self.path+"/model.tflearn")
             print('Model loaded')
         except:
             print('Cant find model file')
@@ -130,7 +133,6 @@ class ClassifierModel:
             "product_id": int(data['product_id']),
             "question": data['question']
         }
-
 
         classification = self._get_predictions(data_converted)
 
