@@ -1,4 +1,6 @@
 // Update with your config settings.
+require('dotenv').config()
+const { HOST, DATABASE, USER_DB, PASSWORD } = process.env
 
 module.exports = {
   development: {
@@ -12,13 +14,13 @@ module.exports = {
     useNullAsDefault: true,
   },
 
-  cloud: {
+  production: {
     client: 'postgresql',
     connection: {
-      host: `35.199.72.2`,
-      database: 'hackathon-db',
-      user: 'postgres',
-      password: 'jCK1az7lx4zy9Jn1',
+      host: `${HOST}`,
+      database: `${DATABASE}`,
+      user: `${USER_DB}`,
+      password: `${PASSWORD}`,
     },
     pool: {
       min: 2,
@@ -28,21 +30,5 @@ module.exports = {
       directory: './src/database/migrations',
     },
     useNullAsDefault: true,
-  },
-
-  production: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password',
-    },
-    pool: {
-      min: 2,
-      max: 10,
-    },
-    migrations: {
-      tableName: 'knex_migrations',
-    },
   },
 }
