@@ -1,4 +1,3 @@
-const uuid = require('uuid')
 const connection = require('../database/connection')
 const path = require('path')
 const fs = require('fs')
@@ -31,25 +30,26 @@ module.exports = {
       let height = null
       let lenght = null
 
-      const id = uuid.v4()
       if (size.width && size.height && size.lenght) {
         width = size.width
         height = size.height
         lenght = size.lenght
       }
 
-      await connection('products').insert({
-        id,
-        name,
-        quantity,
-        width,
-        height,
-        lenght,
-        color,
-        price,
-        weight,
-        description,
-      })
+      const [id] = await connection('products').insert(
+        {
+          name,
+          quantity,
+          width,
+          height,
+          lenght,
+          color,
+          price,
+          weight,
+          description,
+        },
+        'id',
+      )
 
       return response.json({ id, name })
     } catch (err) {
