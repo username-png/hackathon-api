@@ -108,4 +108,16 @@ module.exports = {
       return next()
     }
   },
+
+  async getAwaitingCount(request, response) {
+    try {
+      const questions = await connection('questions')
+        .where('status', 'waiting')
+        .countDistinct()
+
+      return response.json(questions)
+    } catch (err) {
+      return response.json(`ERRO: ${err}`)
+    }
+  },
 }
