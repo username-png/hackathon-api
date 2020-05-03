@@ -3,7 +3,7 @@ require('dotenv').config()
 const { HOST, DATABASE, USER_DB, PASSWORD } = process.env
 
 module.exports = {
-  development: {
+  production: {
     client: 'sqlite3',
     connection: {
       filename: './src/database/db.sqlite3',
@@ -14,7 +14,7 @@ module.exports = {
     useNullAsDefault: true,
   },
 
-  production: {
+  development: {
     client: 'postgresql',
     connection: {
       host: `${HOST}`,
