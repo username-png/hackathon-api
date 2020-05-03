@@ -1,34 +1,32 @@
-const path = require('path')
-const dir = path.join(__dirname, '..', 'python', 'code.py')
+const path = require("path");
+const dir = path.join(__dirname, "..", "python_files", "teste.py");
+const loc = path.join(__dirname, "..", "python_files");
+const { onExit } = require("@rauschma/stringio");
 
 module.exports = {
   callName(req, res) {
     try {
-      // Use child_process.spawn method from
-      // child_process module and assign it
-      // to variable spawn
-      const spawn = require('child_process').spawn
+      product_id = 0;
+      question = "qual a cor?";
 
-      // Parameters passed in spawn -
-      // 1. type_of_script
-      // 2. list containing Path of the script
-      //    and arguments for the script
+      const spawn = require("child_process").spawn;
+      const pythonProcess = spawn("python3", [dir, product_id, question, loc]);
 
-      // E.g : http://localhost:3000/name?firstname=Mike&lastname=Will
-      // so, first name = Mike and last name = Will
-      const process = spawn('python', [
-        dir,
-        req.query.firstname,
-        req.query.lastname,
-      ])
+      pythonProcess.stdout.on("data", (data) => {
+        console.log(`Node received: ${data}`);
+        str_data = data.toString().trim();
 
-      // Takes stdout data from script which executed
-      // with arguments and send this data to res object
-      process.stdout.on('data', function (data) {
-        res.json(data.toString())
-      })
+        //console.log(str_data);
+        array_data = str_data.split("\n");
+
+        results_json = JSON.parse(array_data[array_data.length - 1]);
+
+        //console.log(results_json);
+
+        res.json(results_json);
+      });
     } catch (err) {
-      return res.status(400).json('erro')
+      console.log(err);
     }
   },
-}
+};
