@@ -1,7 +1,7 @@
 const connection = require('../database/connection')
-const uuid = require('uuid')
 const fs = require('fs')
 const path = require('path')
+const crypto = require('crypto')
 const { asyncForEach } = require('../utils/functions')
 
 module.exports = {
@@ -21,8 +21,10 @@ module.exports = {
 
   async index_all(request, response) {
     try {
-      const resPerPage = request.query.resPerPage;
-      const questions = await connection('questions').select('*').limit(resPerPage ? resPerPage : 10)
+      const resPerPage = request.query.resPerPage
+      const questions = await connection('questions')
+        .select('*')
+        .limit(resPerPage || 10)
 
       return response.json(questions)
     } catch (err) {
@@ -36,15 +38,19 @@ module.exports = {
       const { user, question } = request.body
       const status = request.body.status
       const errorMsg = request.body.err
-      const id = uuid.v4()
 
-      await connection('questions').insert({
-        id,
-        user,
-        question,
-        status,
-        product_id,
-      })
+      const id = parseInt(crypto.randomBytes(3).toString('HEX'), 16)
+
+      await connection('questions').insert(
+        {
+          id,
+          user,
+          question,
+          status,
+          product_id,
+        },
+        'id',
+      )
       return response.json({ id, status, question, errorMsg })
     } catch (err) {
       return response.json(`ERRO: ${err}`)
