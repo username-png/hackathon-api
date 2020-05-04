@@ -8,6 +8,8 @@ questionsRouter.get('/random', QuestionController.index_all)
 questionsRouter.post(
   '/',
   QuestionController.checkIfSwearing,
+  QuestionController.getPredictions,
+  QuestionController.verify,
   QuestionController.create,
 )
 questionsRouter.patch('/answer', QuestionController.answer)

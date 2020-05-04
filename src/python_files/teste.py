@@ -5,7 +5,7 @@ import json
 
 data = {
     "product_id": sys.argv[1],
-    "question": sys.argv[2] 
+    "question": sys.argv[2]
 }
 
 
