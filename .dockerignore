@@ -1,0 +1,9 @@
+app/node_modules
+app/npm-debug.log
+app/yarn.lock
+app/.gitignore
+app/.eslintrc.json
+app/.editorconfig
+app/src/database/migrations
+app/src
+.git
