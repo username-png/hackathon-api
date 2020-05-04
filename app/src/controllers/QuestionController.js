@@ -175,6 +175,7 @@ module.exports = {
     try {
       const status = request.body.status
 
+
       if (status === 'new') {
         const product_id = request.query.product_id
         const question = request.body.question
@@ -191,9 +192,12 @@ module.exports = {
           request.body.is_good = results_json.is_good
           request.body.status = results_json.status
           request.body.tag = results_json.tag
+          next()
         }
+        console.log('aqui')
+      }else{
+        next()
       }
-      next()
     } catch (err) {
       response.json(err)
     }
