@@ -1,6 +1,7 @@
 FROM python:3.6
 
 ADD . /app
+COPY . /app
 WORKDIR /app
 
 RUN \
@@ -13,8 +14,18 @@ RUN \
   pip install -U pip && pip install pipenv && \
   npm i -g npm@^6 && \
   rm -rf /var/lib/apt/lists/* && \ 
-  pip install -r app/requirements.txt && \ 
+  pwd && \
+  ls && \
+  pip install -r app/src/python_files/requirements.txt && \ 
   cd app && npm i --production && cd ..
 
-ENV PRODUCTION=true
+ENV PRODUCTION true
+ENV PRODUCTION true
+ENV PASSWORD jCK1az7lx4zy9Jn1
+ENV HOST /cloudsql/thematic-garage-276021:southamerica-east1:my-db
+ENV DATABASE hackathon-db
+ENV USER_DB postgres
 
+EXPOSE 8080
+
+CMD [ "node", "app/src/server.js" ]
