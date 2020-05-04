@@ -183,11 +183,11 @@ module.exports = {
         const spawn = require('child_process').spawn
         const pythonProcess = spawn('python3', [dir, product_id, question, loc])
         try{
-
           for await (const data of pythonProcess.stdout) {
             const str_data = data.toString().trim()
 
             const array_data = str_data.split('\n')
+            // console.log(str_data)
 
             const results_json = JSON.parse(array_data[array_data.length - 1])
             request.body.is_good = results_json.is_good
