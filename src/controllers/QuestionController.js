@@ -39,7 +39,7 @@ module.exports = {
       const { user, question, is_good, status, answer } = request.body
       const errorMsg = request.body.err
 
-      const id = await connection('questions').insert(
+      const [id] = await connection('questions').insert(
         {
           user,
           answer,
@@ -52,7 +52,7 @@ module.exports = {
       )
       return response.json({ id, status, question, errorMsg })
     } catch (err) {
-      return response.json(`ERRO: ${err}`)
+      return response.json(err)
     }
   },
 
@@ -71,27 +71,27 @@ module.exports = {
             'Olá. Aceitamos todos os pagamentos via plataforma'
         } else if (tag === 'valor') {
           const price = await connection('products')
-            .where('product_id', product_id)
+            .where('id', product_id)
             .select('price')
           request.body.answer = `Olá. O preço da unidade do produto é de ${price}. Qualquer dúvida estamos a disposição.`
         } else if (tag === 'tamanho') {
           const size = await connection('products')
-            .where('product_id', product_id)
+            .where('id', product_id)
             .select('height', 'lenght', 'width')
           request.body.answer = `Olá. As dimensão do produto são: Altura: ${size[0]}, Comprimento: ${size[1]}, Largura: ${size[2]}`
         } else if (tag === 'peso') {
           const weigth = await connection('products')
-            .where('product_id', product_id)
+            .where('id', product_id)
             .select('weight')
           request.body.answer = `Olá. O peso do produto é aproximadamente ${weigth} kg`
         } else if (tag === 'cor') {
           const color = await connection('products')
-            .where('product_id', product_id)
+            .where('id', product_id)
             .select('color')
           request.body.answer = `Olá. Temos disponivel na(s) cor(es) ${color}`
         } else if (tag === 'estoque') {
           const quantity = await connection('products')
-            .where('product_id', product_id)
+            .where('id', product_id)
             .select('quantity')
           request.body.answer = `Olá. Temos disponivel ${quantity} produto(s)`
         }
@@ -174,27 +174,24 @@ module.exports = {
   async getPredictions(request, response, next) {
     try {
       const status = request.body.status
-      console.log(status)
 
       if (status === 'new') {
-        console.log('oi gente')
         const product_id = request.query.product_id
         const question = request.body.question
         const spawn = require('child_process').spawn
         const pythonProcess = spawn('python3', [dir, product_id, question, loc])
 
-        await pythonProcess.stdout.on('data', data => {
+        for await (const data of pythonProcess.stdout) {
           const str_data = data.toString().trim()
 
           const array_data = str_data.split('\n')
 
           const results_json = JSON.parse(array_data[array_data.length - 1])
 
-          request.is_good = results_json.is_good
-          request.status = results_json.status
-          request.tag = results_json.tag
-          console.log(results_json)
-        })
+          request.body.is_good = results_json.is_good
+          request.body.status = results_json.status
+          request.body.tag = results_json.tag
+        }
       }
       next()
     } catch (err) {
