@@ -60,8 +60,9 @@ module.exports = {
     try {
       const product_id = request.query.product_id
       const { is_good, tag } = request.body
+
       if (is_good === 1) {
-        next()
+        return next()
       } else if (is_good === 0) {
         if (tag === 'frete') {
           request.body.answer =
@@ -73,30 +74,30 @@ module.exports = {
           const price = await connection('products')
             .where('id', product_id)
             .select('price')
-          request.body.answer = `Olá. O preço da unidade do produto é de ${price}. Qualquer dúvida estamos a disposição.`
+          request.body.answer = `Olá. O preço da unidade do produto é de ${price[0].price}. Qualquer dúvida estamos a disposição.`
         } else if (tag === 'tamanho') {
           const size = await connection('products')
             .where('id', product_id)
             .select('height', 'lenght', 'width')
-          request.body.answer = `Olá. As dimensão do produto são: Altura: ${size[0]}, Comprimento: ${size[1]}, Largura: ${size[2]}`
+          request.body.answer = `Olá. As dimensão do produto são: Altura: ${size[0].height}, Comprimento: ${size[1].lenght}, Largura: ${size[2].width}`
         } else if (tag === 'peso') {
           const weigth = await connection('products')
             .where('id', product_id)
             .select('weight')
-          request.body.answer = `Olá. O peso do produto é aproximadamente ${weigth} kg`
+          request.body.answer = `Olá. O peso do produto é aproximadamente ${weigth[0].weigth} kg`
         } else if (tag === 'cor') {
           const color = await connection('products')
             .where('id', product_id)
             .select('color')
-          request.body.answer = `Olá. Temos disponivel na(s) cor(es) ${color}`
+          request.body.answer = `Olá. Temos disponivel na(s) cor(es) ${color[0].color}`
         } else if (tag === 'estoque') {
           const quantity = await connection('products')
             .where('id', product_id)
             .select('quantity')
-          request.body.answer = `Olá. Temos disponivel ${quantity} produto(s)`
+          request.body.answer = `Olá. Temos disponivel ${quantity[0].quantity} produto(s)`
         }
       }
-      next()
+      return next()
     } catch (err) {
       return response.json(err)
     }
@@ -155,7 +156,7 @@ module.exports = {
       return next()
     } else {
       request.body.status = 'new'
-      next()
+      return next()
     }
   },
 
@@ -181,25 +182,27 @@ module.exports = {
         const question = request.body.question
         const spawn = require('child_process').spawn
         const pythonProcess = spawn('python3', [dir, product_id, question, loc])
+        try{
 
-        for await (const data of pythonProcess.stdout) {
-          const str_data = data.toString().trim()
+          for await (const data of pythonProcess.stdout) {
+            const str_data = data.toString().trim()
 
-          const array_data = str_data.split('\n')
+            const array_data = str_data.split('\n')
 
-          const results_json = JSON.parse(array_data[array_data.length - 1])
-
-          request.body.is_good = results_json.is_good
-          request.body.status = results_json.status
-          request.body.tag = results_json.tag
-          next()
+            const results_json = JSON.parse(array_data[array_data.length - 1])
+            request.body.is_good = results_json.is_good
+            request.body.status = results_json.status
+            request.body.tag = results_json.tag
+          }
+          return next()
+        }catch(e){
+          return next()
         }
-        console.log('aqui')
       }else{
-        next()
+        return next()
       }
     } catch (err) {
-      response.json(err)
+      return response.json(err)
     }
   },
 }
